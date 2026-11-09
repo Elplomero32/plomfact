@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+.venv/
+# Nunca versionar secretos, certificados ni datos fiscales
+*.p12
+*.pfx
+*.pem
+*.key
+secrets/
+data/
+config/dgii_spec.toml
+config/settings.toml

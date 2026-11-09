@@ -1,0 +1,25 @@
+# Configuración local del emisor. Copie a config/settings.toml. NO coloque contraseñas aquí.
+ambiente = "precertificacion"      # precertificacion | certificacion | produccion
+rnc_emisor = ""
+razon_social = ""
+base_datos = "../data/plomfact_ecf.sqlite3"
+evidencias = "../data/evidencias"
+spec = "dgii_spec.toml"
+
+# Producción solo se habilita tras concluir la certificación oficial Y registrar la autorización
+# (plomfact-ecf habilitar --ambiente produccion --referencia "...").
+produccion_habilitada = false
+
+[certificado]
+archivo = "../secrets/certificado.p12"
+clave_env = "PLOMFACT_CERT_PASSWORD"         # o bien:
+# clave_archivo = "../secrets/certificado.pass" # permisos 600
+
+# XSD oficiales por tipo de e-CF (descargados del portal de la DGII)
+[xsd]
+# "31" = "../schemas/<archivo oficial>.xsd"
+
+[umbrales]
+certificado_dias = [60, 15]   # advertencia, crítica
+rango_dias = [30, 7]
+rango_restantes = [500, 50]

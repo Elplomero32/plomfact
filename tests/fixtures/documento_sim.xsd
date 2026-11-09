@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- XSD FICTICIO SOLO PARA PRUEBAS. No es un esquema oficial de la DGII. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:ds="http://www.w3.org/2000/09/xmldsig#" elementFormDefault="qualified">
+  <xs:import namespace="http://www.w3.org/2000/09/xmldsig#"/>
+  <xs:element name="DocumentoSim">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Cabecera">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="NumeroSim" type="xs:string"/>
+              <xs:element name="TipoSim" type="xs:string"/>
+              <xs:element name="EmisorSim" type="xs:string"/>
+              <xs:element name="CompradorSim" type="xs:string" minOccurs="0"/>
+              <xs:element name="FechaSim" type="xs:string"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Totales">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="TotalSim" type="xs:decimal"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="FechaFirmaSim" type="xs:string"/>
+        <xs:any namespace="http://www.w3.org/2000/09/xmldsig#" processContents="skip"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

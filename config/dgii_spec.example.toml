@@ -1,0 +1,179 @@
+# =====================================================================================
+# Especificación técnica DGII — PLANTILLA
+# =====================================================================================
+# Copie este archivo a config/dgii_spec.toml y complete CADA valor exclusivamente con la
+# documentación técnica oficial vigente publicada por la DGII (portal dgii.gov.do →
+# Facturación Electrónica → Documentación sobre e-CF), p. ej.:
+#   - "Descripción Técnica Servicios DGII"
+#   - "Descripción Técnica Emisores Electrónicos"
+#   - Formatos XML / XSD oficiales y "Firmado de e-CF"
+#
+# Reglas:
+#   * No deje valores supuestos. Si un dato no está en la documentación, deje la sección
+#     con verificado = false: el sistema bloqueará la función que lo necesita.
+#   * "fuente" debe identificar documento, versión, fecha y página/sección.
+#   * Este archivo es parte del historial fiscal: versiónelo en un repositorio privado y
+#     registre quién lo verificó. No contiene secretos.
+# =====================================================================================
+
+[ambientes.precertificacion]
+base_url = ""            # URL base HTTPS del ambiente de pruebas/precertificación
+verificado = false
+fuente = ""
+
+[ambientes.certificacion]
+base_url = ""
+verificado = false
+fuente = ""
+
+[ambientes.produccion]
+base_url = ""
+verificado = false
+fuente = ""
+
+# ---------------------------------------------------------------- servicios web
+# ruta: relativa a base_url. parametros: nombre lógico -> nombre exacto del parámetro oficial.
+
+[endpoints.semilla]
+metodo = "GET"
+ruta = ""
+verificado = false
+fuente = ""
+
+[endpoints.validar_semilla]
+metodo = "POST"
+ruta = ""
+campo_archivo = ""       # nombre del campo multipart oficial para la semilla firmada
+verificado = false
+fuente = ""
+
+[endpoints.recepcion_ecf]
+metodo = "POST"
+ruta = ""
+campo_archivo = ""       # nombre del campo multipart oficial para el XML del e-CF
+nombre_archivo = ""      # convención oficial del nombre del archivo, p. ej. con {rnc_emisor} y {encf}
+verificado = false
+fuente = ""
+
+[endpoints.consulta_resultado]
+metodo = "GET"
+ruta = ""
+verificado = false
+fuente = ""
+[endpoints.consulta_resultado.parametros]
+trackid = ""             # nombre exacto del parámetro del identificador de seguimiento
+
+# Opcional: consulta de identificadores de seguimiento por e-NCF. Se usa para resolver envíos
+# ambiguos (timeout después de enviar) sin retransmitir a ciegas.
+[endpoints.consulta_trackids]
+metodo = "GET"
+ruta = ""
+verificado = false
+fuente = ""
+[endpoints.consulta_trackids.parametros]
+rnc_emisor = ""
+encf = ""
+
+# Opcional: estado de disponibilidad de los servicios DGII (detección de contingencia).
+[endpoints.estatus_servicios]
+metodo = "GET"
+ruta = ""                # puede ser una URL absoluta si el servicio está en otro host oficial
+verificado = false
+fuente = ""
+
+# ---------------------------------------------------------------- respuestas
+# Nombres EXACTOS de los campos en las respuestas oficiales.
+[respuestas]
+encabezado_token = ""    # encabezado HTTP oficial para enviar el token
+prefijo_token = ""       # prefijo oficial del valor (incluya el espacio si aplica)
+token = ""
+token_expira = ""        # campo con la fecha de expiración del token
+trackid = ""
+estado = ""
+mensajes = ""            # opcional
+encf = ""                # opcional: campo e-NCF en la respuesta de consulta
+margen_renovacion_token_segundos = 60
+verificado = false
+fuente = ""
+
+# ---------------------------------------------------------------- estados fiscales
+# Valores EXACTOS (texto y/o código) que devuelve la DGII. Un comprobante solo se considera
+# fiscalmente válido si su estado está en "aceptados" o "aceptados_condicional".
+# Cualquier valor no listado se trata como DESCONOCIDO: no válido y requiere revisión.
+[estados]
+aceptados = []
+aceptados_condicional = []
+rechazados = []
+en_proceso = []
+no_encontrado = []
+verificado = false
+fuente = ""
+
+# ---------------------------------------------------------------- firma digital
+[firma]
+algoritmo_firma = ""        # URI XMLDSig oficial, p. ej. el de RSA-SHA256 si así lo indica la DGII
+algoritmo_digest = ""       # URI XMLDSig oficial
+canonicalizacion = ""       # URI XMLDSig oficial
+prefijo_namespace_firma = ""                # prefijo XML del namespace de la firma; vacío = sin prefijo
+elemento_fecha_firma = ""   # nombre del elemento de fecha/hora de firma en el e-CF
+formato_fecha_firma = ""    # formato strftime equivalente al oficial
+zona_horaria = "America/Santo_Domingo"
+verificado = false
+fuente = ""
+
+# ---------------------------------------------------------------- código de seguridad
+[codigo_seguridad]
+origen = "SignatureValue"   # única regla implementada; confirme contra la documentación
+longitud = 0                # número de caracteres oficiales
+verificado = false
+fuente = ""
+
+# ---------------------------------------------------------------- QR / verificación
+# Plantillas con marcadores {RncEmisor} {RncComprador} {ENCF} {FechaEmision} {MontoTotal}
+# {FechaFirma} {CodigoSeguridad}. Use los nombres de parámetro EXACTOS de la DGII.
+[qr]
+verificado = false
+fuente = ""
+[qr.plantillas]
+precertificacion = ""
+certificacion = ""
+produccion = ""
+# Plantillas especiales por tipo de e-CF (si la DGII define una URL distinta para algún tipo).
+[qr.plantillas_por_tipo.precertificacion]
+[qr.plantillas_por_tipo.certificacion]
+[qr.plantillas_por_tipo.produccion]
+
+# ---------------------------------------------------------------- XML
+# Estructura según los XSD oficiales. Coloque los XSD oficiales en schemas/ y relaciónelos por
+# tipo de e-CF en config/settings.toml ([xsd]).
+[xml]
+verificado = false
+fuente = ""
+[xml.raices]
+ecf = ""                 # elemento raíz del e-CF
+[xml.rutas]
+# XPath (relativo a la raíz) de cada dato fiscal en el XML oficial
+encf = ""
+tipo_ecf = ""
+rnc_emisor = ""
+rnc_comprador = ""       # puede quedar vacío si el tipo de e-CF no lo exige
+fecha_emision = ""
+monto_total = ""
+
+# ---------------------------------------------------------------- e-NCF
+[encf]
+prefijo = ""
+longitud_tipo = 0
+longitud_secuencial = 0
+patron_regex = ""
+verificado = false
+fuente = ""
+[encf.tipos]
+# "codigo" = "nombre oficial del tipo de e-CF"
+
+# ---------------------------------------------------------------- contingencia
+[contingencia]
+fallos_consecutivos_para_activar = 3   # política interna
+plazo_maximo_regularizacion_horas = 0  # plazo oficial para transmitir lo emitido en contingencia
+verificado = false
+fuente = ""

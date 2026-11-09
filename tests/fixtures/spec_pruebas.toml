@@ -1,0 +1,140 @@
+# ESPECIFICACIÓN FICTICIA SOLO PARA PRUEBAS AUTOMATIZADAS.
+# Los hosts usan el dominio reservado .invalid y los nombres/valores son inventados a propósito:
+# NO representan los servicios ni los formatos oficiales de la DGII.
+
+[ambientes.precertificacion]
+base_url = "https://precert.dgii-simulado.invalid"
+verificado = true
+fuente = "FIXTURE DE PRUEBAS"
+
+[ambientes.certificacion]
+base_url = "https://cert.dgii-simulado.invalid"
+verificado = true
+fuente = "FIXTURE DE PRUEBAS"
+
+[ambientes.produccion]
+base_url = "https://prod.dgii-simulado.invalid"
+verificado = true
+fuente = "FIXTURE DE PRUEBAS"
+
+[endpoints.semilla]
+metodo = "GET"
+ruta = "/sim/semilla"
+verificado = true
+fuente = "FIXTURE DE PRUEBAS"
+
+[endpoints.validar_semilla]
+metodo = "POST"
+ruta = "/sim/validar-semilla"
+campo_archivo = "archivo_sim"
+verificado = true
+fuente = "FIXTURE DE PRUEBAS"
+
+[endpoints.recepcion_ecf]
+metodo = "POST"
+ruta = "/sim/recepcion"
+campo_archivo = "archivo_sim"
+nombre_archivo = "{rnc_emisor}{encf}.xml"
+verificado = true
+fuente = "FIXTURE DE PRUEBAS"
+
+[endpoints.consulta_resultado]
+metodo = "GET"
+ruta = "/sim/resultado"
+verificado = true
+fuente = "FIXTURE DE PRUEBAS"
+[endpoints.consulta_resultado.parametros]
+trackid = "id_sim"
+
+[endpoints.consulta_trackids]
+metodo = "GET"
+ruta = "/sim/trackids"
+verificado = true
+fuente = "FIXTURE DE PRUEBAS"
+[endpoints.consulta_trackids.parametros]
+rnc_emisor = "rnc_sim"
+encf = "encf_sim"
+
+[endpoints.estatus_servicios]
+metodo = "GET"
+ruta = "/sim/estatus"
+verificado = true
+fuente = "FIXTURE DE PRUEBAS"
+
+[respuestas]
+encabezado_token = "X-Token-Sim"
+prefijo_token = "Sim "
+token = "tokenSim"
+token_expira = "expiraSim"
+trackid = "seguimientoSim"
+estado = "estadoSim"
+mensajes = "mensajesSim"
+margen_renovacion_token_segundos = 60
+verificado = true
+fuente = "FIXTURE DE PRUEBAS"
+
+[estados]
+aceptados = ["SIM_OK"]
+aceptados_condicional = ["SIM_OK_COND"]
+rechazados = ["SIM_RECHAZO"]
+en_proceso = ["SIM_PROCESANDO"]
+no_encontrado = ["SIM_NO_EXISTE"]
+verificado = true
+fuente = "FIXTURE DE PRUEBAS"
+
+[firma]
+algoritmo_firma = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
+algoritmo_digest = "http://www.w3.org/2001/04/xmlenc#sha256"
+canonicalizacion = "http://www.w3.org/TR/2001/REC-xml-c14n-20010315"
+prefijo_namespace_firma = ""
+elemento_fecha_firma = "FechaFirmaSim"
+formato_fecha_firma = "%d-%m-%Y %H:%M:%S"
+zona_horaria = "America/Santo_Domingo"
+verificado = true
+fuente = "FIXTURE DE PRUEBAS"
+
+[codigo_seguridad]
+origen = "SignatureValue"
+longitud = 6
+verificado = true
+fuente = "FIXTURE DE PRUEBAS"
+
+[qr]
+verificado = true
+fuente = "FIXTURE DE PRUEBAS"
+[qr.plantillas]
+precertificacion = "https://precert.dgii-simulado.invalid/verificar?e={RncEmisor}&c={RncComprador}&n={ENCF}&f={FechaEmision}&m={MontoTotal}&ff={FechaFirma}&cs={CodigoSeguridad}"
+certificacion = "https://cert.dgii-simulado.invalid/verificar?e={RncEmisor}&n={ENCF}&cs={CodigoSeguridad}"
+produccion = "https://prod.dgii-simulado.invalid/verificar?e={RncEmisor}&n={ENCF}&cs={CodigoSeguridad}"
+[qr.plantillas_por_tipo.precertificacion]
+"92" = "https://precert.dgii-simulado.invalid/verificar-especial?e={RncEmisor}&n={ENCF}&cs={CodigoSeguridad}"
+
+[xml]
+verificado = true
+fuente = "FIXTURE DE PRUEBAS"
+[xml.raices]
+ecf = "DocumentoSim"
+[xml.rutas]
+encf = "string(Cabecera/NumeroSim)"
+tipo_ecf = "string(Cabecera/TipoSim)"
+rnc_emisor = "string(Cabecera/EmisorSim)"
+rnc_comprador = "string(Cabecera/CompradorSim)"
+fecha_emision = "string(Cabecera/FechaSim)"
+monto_total = "string(Totales/TotalSim)"
+
+[encf]
+prefijo = "X"
+longitud_tipo = 2
+longitud_secuencial = 8
+patron_regex = "X(91|92)[0-9]{8}"
+verificado = true
+fuente = "FIXTURE DE PRUEBAS"
+[encf.tipos]
+"91" = "Documento simulado A"
+"92" = "Documento simulado B"
+
+[contingencia]
+fallos_consecutivos_para_activar = 2
+plazo_maximo_regularizacion_horas = 24
+verificado = true
+fuente = "FIXTURE DE PRUEBAS"
